@@ -10,11 +10,11 @@ Lightweight objects and strings validation for Node.js.
 
     var schema = legit.Number().min(0).max(10);
 
-    schema.test(30); // 'Greater than max'
-    schema.test(5);  // null
+    schema.test(30);  // 'Greater than max'
+    schema.test(5);   // null
 
-    legit.mize(schema, 30)  // 'Greater than max'
-    legit.mize(schema, 5)   // null
+    legit.mize(schema, 30);  // 'Greater than max'
+    legit.mize(schema, 5);   // null
 ```
 
 Note: Use of "new" is not needed when creating an instance of a schema.
@@ -29,10 +29,10 @@ Note: Use of "new" is not needed when creating an instance of a schema.
         var good_data = true;
         var bad_data = 123;
 
-        var result1 = legit.mize(schema, good_data);    // null (no error)
+        var result1 = legit.mize(schema, good_data); // null (no error)
                 //  = schema.test(good_data);
         
-        var result2 = legit.mize(schema, bad_data);     // 'Not a boolean'
+        var result2 = legit.mize(schema, bad_data);  // 'Not a boolean'
                 //  = schema.test(bad_data);
 ```
 
@@ -44,10 +44,10 @@ Note: Use of "new" is not needed when creating an instance of a schema.
         var good_data = -3;
         var bad_data = 11;
 
-        var result1 = legit.mize(schema, good_data);    // null (no error)
+        var result1 = legit.mize(schema, good_data); // null (no error)
                 //  = schema.test(good_data);
         
-        var result2 = legit.mize(schema, bad_data);     // 'Greater than maximum'
+        var result2 = legit.mize(schema, bad_data);  // 'Greater than maximum'
                 //  = schema.test(bad_data);
 ```
 
@@ -59,10 +59,10 @@ Note: Use of "new" is not needed when creating an instance of a schema.
         var good_data = "Legit.js is cool!";
         var bad_data = "Legit.js is not cool.";
 
-        var result1 = legit.mize(schema, good_data);    // null (no error)
+        var result1 = legit.mize(schema, good_data); // null (no error)
                 //  = schema.test(good_data);
         
-        var result2 = legit.mize(schema, bad_data);     // 'Greater than maximum'
+        var result2 = legit.mize(schema, bad_data);  // 'Greater than maximum'
                 //  = schema.test(bad_data);
 ```
 
