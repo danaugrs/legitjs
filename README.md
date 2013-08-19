@@ -17,7 +17,7 @@ Lightweight objects and strings validation for Node.js.
     legit.mize(schema, 5)   // null
 ```
 
-Note: Use of "new" is not needed.
+Note: Use of "new" is not needed when creating an instance of a schema.
 
 ## Examples
 
