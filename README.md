@@ -1,11 +1,12 @@
 # legit.js 0.1.0
 
-Lightweight objects and strings validation in javascript for Node.js.
+Lightweight objects and strings validation for Node.js.
+
 
 ## Usage
 
 ```js
-    var legit = require("legit");
+    var legit = require("./legit");
 
     var schema = legit.Number().min(0).max(10);
 
@@ -16,11 +17,9 @@ Lightweight objects and strings validation in javascript for Node.js.
     legit.mize(schema, 5)   // null
 ```
 
-OBS: Use of "new" is not needed when calling legit.<anything> .
+Note: Use of "new" is not needed.
 
 ## Examples
-
-Simple examples to illustrate the use of different legit.js schemas.
 
 ### Boolean
 
@@ -76,37 +75,37 @@ Simple examples to illustrate the use of different legit.js schemas.
         var good_data = [1, 2, 3];
         var bad_data = [-10, true, "potato", [1, 2], null];
         
-        var result1 = legit.mize(schema, good_data);    // null (no error)
+        var result1 = legit.mize(schema, good_data);  // null (no error)
                 //  = schema.test(good_data);
         
-        var result2 = legit.mize(schema, bad_data);     // [ 'Less than minimum',
-                //  = schema.test(bad_data);            //   'Not a number',
-                                                        //   'Not a number',
-                                                        //   'Not a number',
-                                                        //   'Number is null or undefined' ]
+        var result2 = legit.mize(schema, bad_data);   // [ 'Less than minimum',
+                //  = schema.test(bad_data);          //   'Not a number',
+                                                      //   'Not a number',
+                                                      //   'Not a number',
+                                                      //   'Number is null or undefined' ]
 ```
 
 ### Map
 
 ```js
         var schema = legit.Map().
-            key("name", legit.String().min(5).max(20)).
+            key("name", legit.String().min(5).max(10)).
             key("age", legit.Number().min(21).max(130));
 
         var good_data = {
-            "name"  : "Piscine Molitor Patel",
+            "name"  : "John Doe",
             "age"   : 21
             };
         
         var bad_data = {
-            "name"  : "Joe",
+            "name"  : "SuperLongName",
             "age"   : 16
             };
 
-        var result1 = legit.mize(schema, good_data);    // null (no error)
+        var result1 = legit.mize(schema, good_data); // null (no error)
                 //  = schema.test(good_data);
         
-        var result2 = legit.mize(schema, bad_data);     // { name: 'Greater than maximum',
-                //  = schema.test(bad_data);            //   age:  'Less than minimum' }
+        var result2 = legit.mize(schema, bad_data);  // { name: 'Greater than maximum',
+                //  = schema.test(bad_data);         //   age:  'Less than minimum' }
 ```
 
