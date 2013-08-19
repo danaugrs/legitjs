@@ -75,14 +75,14 @@ Note: Use of "new" is not needed when creating an instance of a schema.
         var good_data = [1, 2, 3];
         var bad_data = [-10, true, "potato", [1, 2], null];
         
-        var result1 = legit.mize(schema, good_data);  // null (no error)
+        var result1 = legit.mize(schema, good_data); // null (no error)
                 //  = schema.test(good_data);
         
-        var result2 = legit.mize(schema, bad_data);   // [ 'Less than minimum',
-                //  = schema.test(bad_data);          //   'Not a number',
-                                                      //   'Not a number',
-                                                      //   'Not a number',
-                                                      //   'Number is null or undefined' ]
+        var result2 = legit.mize(schema, bad_data);  // ['Less than minimum',
+                //  = schema.test(bad_data);         //  'Not a number',
+                                                     //  'Not a number',
+                                                     //  'Not a number',
+                                                     //  'Number is null or undefined']
 ```
 
 ### Map
