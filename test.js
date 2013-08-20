@@ -89,8 +89,8 @@ function main() {
     var map1 = legit.Map().strict().
         key("id1", legit.Number().min(0).max(100)).
         key("id2", legit.Number().min(1).max(100));
-	ok = [{"id1": 19, "id": 2}, {"id1": 99, "id2":50}];
-	nok = [{"id2": 19, "id3": 2}, {"id1": 100, "id2":-3}];
+	ok = [{"id1": 19, "id2": 2}, {"id1": 99, "id2":50}];
+	nok = [{"id2": 19, "id3": 2}, {"id1": 100, "id2":-3, "other": 42}];
     test(map1, ok, nok, "Map1");
 
 }
