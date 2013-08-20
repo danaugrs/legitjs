@@ -4,6 +4,15 @@
 
 "use strict";
 
+/************************
+ * Anything Legitimizer
+ */
+
+function Any() {}
+
+Any.prototype.test = function(value) {
+    return null
+}
 
 /************************
  * Bool Legitimizer
@@ -313,6 +322,7 @@ Map.prototype.test = function(value) {
  */
 
 module.exports = {
+    Any         : function() {return new Any()},
 	Boolean		: function() {return new Boolean()},
 	Number		: function() {return new Number()},
 	String		: function() {return new String()},
