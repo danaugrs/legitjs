@@ -1,8 +1,25 @@
-/**
+/************************
  * Legit.js
+ *
+ * Lightweight objects and strings validation for Node.js
+ *
+ * Copyright (c) 2013 Daniel R. Salvadori
  */
 
 "use strict";
+
+/************************
+ * Null Legitimizer
+ */
+
+function Null() {}
+
+Null.prototype.test = function(value) {
+	if (value === null) {
+    	return null;
+	}
+	return "Not null";
+}
 
 /************************
  * Anything Legitimizer
@@ -322,6 +339,7 @@ Map.prototype.test = function(value) {
  */
 
 module.exports = {
+	Null		: function() {return new Null()},
     Any         : function() {return new Any()},
 	Boolean		: function() {return new Boolean()},
 	Number		: function() {return new Number()},
