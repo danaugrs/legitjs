@@ -289,7 +289,7 @@ Map.prototype.test = function(value) {
         return "Not a map";
     }
     for (el in this._keys) {
-        if (value[el] == undefined) {
+        if (value[el] === undefined) {
             err = "Missing this key";
         } else {
             err = this._keys[el].test(value[el]);
