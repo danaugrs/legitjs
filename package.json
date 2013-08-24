@@ -1,0 +1,37 @@
+{
+  "name": "legitjs",
+  "version": "0.1.0",
+  "description": "Lightweight objects and strings validation for Node.js",
+  "main": "legit.js",
+  "scripts": {
+    "test": "test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/danaugrs/legitjs.git"
+  },
+  "keywords": [
+    "validator",
+    "validation",
+    "valid",
+    "schema",
+    "schematic",
+    "assert",
+    "assertion",
+    "json",
+    "node",
+    "nodejs",
+    "node.js",
+    "legit",
+    "legitjs",
+    "legit.js"
+  ],
+  "author": {
+    "name": "Daniel Salvadori",
+    "email": "danaugrs@gmail.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/danaugrs/legitjs/issues"
+  }
+}
