@@ -5,107 +5,207 @@ Lightweight objects and strings validation for Node.js.
 
 ## Usage
 
+Legit.js allows you to create schemas and then use them to validate data.
+
+There are two alternative usages:
+- `schema.test(data)`
+- `legit.mize(schema, data)`
+
+These functions return `null` if there was no error validating the data.
+If the data didn't fit the schema, they return a description of the error (either a String, an Array, or a Map/Object).
+
 ```js
-    var legit = require("./legit");
-
-    var schema = legit.Number().min(0).max(10);
-
-    schema.test(30);  // 'Greater than max'
-    schema.test(5);   // null
-
-    legit.mize(schema, 30);  // 'Greater than max'
-    legit.mize(schema, 5);   // null
+    var schema = legit.Number().min(5).max(10);
+    
+    var err1 = schema.test(30);  // err1 = 'Greater than max'
+    var err2 = schema.test(6);   // err2 = null
+    
+    // alternate usage
+    err1 = legit.mize(schema, 30);  // err1 = 'Greater than max'
+    err2 = legit.mize(schema, 6);   // err2 = null
 ```
 
-Note: Use of "new" is not needed when creating an instance of a schema.
+Suppose you have some incoming network data and you want to validate it before using/processing it.
 
-## Examples
+```js
+    // Create the schema
+    var loginSchema = legit.Map().strict()
+        .key("user", legit.String().min(3).max(20))
+        .key("age", legit.Number().min(21));
+    
+    // Validate incoming data
+    var err = loginSchema.test(data);
 
-### Boolean
+    if (err) {
+        // Data did not fit the schema. Check 'err' to learn what went wrong.
+        console.log(err);
+    }
+    else {
+        // Data successfully validated! Now you can use/process it with confidence.
+        ...
+    }
+```
+
+Note: Keyword "new" should not be used when creating an instance of a schema.
+
+
+## Types Of Schemas
+
+- legit.Any()
+- legit.Null()
+- legit.Boolean()
+- legit.Number()
+- legit.String()
+- legit.Array()
+- legit.Map()
+
+
+### legit.Any()
+
+Accepts anything.
+
+```js
+        var schema = legit.Any();
+        schema.test("POTATO")   // null
+        schema.test([1, 2, 3])  // null
+```
+
+### legit.Null()
+
+Accepts only `null`.
+
+```js
+        var schema = legit.Null();
+        schema.test("Hello")    // 'Not null'
+        schema.test(null)       // null
+```
+
+### legit.Boolean()
+
+Accepts only Booleans.
+
+Modifiers:
+- none(): Accepts `null` and `undefined`.
 
 ```js
         var schema = legit.Bool();
+        schema.test(123)    // 'Not a boolean'
+        schema.test(null)   // 'Boolean is null or undefined'
+        schema.test(true)   // null
 
-        var good_data = true;
-        var bad_data = 123;
-
-        var result1 = legit.mize(schema, good_data); // null (no error)
-                //  = schema.test(good_data);
-        
-        var result2 = legit.mize(schema, bad_data);  // 'Not a boolean'
-                //  = schema.test(bad_data);
+        var schema2 = legit.Bool().none()
+        schema2.test(null)   // null
 ```
 
-### Number
+### legit.Number()
+
+Accepts only Numbers.
+
+Modifiers:
+- `none()`: Accepts `null` and `undefined`.
+- `min(a)`: Sets minimum allowed value (`a`).
+- `max(b)`: Sets maximum allowed value (`b`).
 
 ```js
-        var schema = legit.Number().min(-10).max(10);
-
-        var good_data = -3;
-        var bad_data = 11;
-
-        var result1 = legit.mize(schema, good_data); // null (no error)
-                //  = schema.test(good_data);
-        
-        var result2 = legit.mize(schema, bad_data);  // 'Greater than maximum'
-                //  = schema.test(bad_data);
+        var schema = legit.Number().min(-5).max(30);
+        schema.test(-5);    // null
+        schema.test(31);    // 'Greater than maximum'
+        schema.test(true);  // 'Not a number'
+        schema.test(null);  // 'Number is null or undefined'
 ```
 
-### String
+### legit.String()
+
+Accepts only Strings.
+
+Modifiers:
+- `none()`: Accepts `null` and `undefined`.
+- `min(a)`: Sets minimum allowed length (`a`).
+- `max(b)`: Sets maximum allowed length (`b`).
+- `regex(e)`: Sets a regular expression to use (`e`).
 
 ```js
-        var schema = legit.String().min(5).max(19);
-
-        var good_data = "Legit.js is cool!";
-        var bad_data = "Legit.js is not cool.";
-
-        var result1 = legit.mize(schema, good_data); // null (no error)
-                //  = schema.test(good_data);
-        
-        var result2 = legit.mize(schema, bad_data);  // 'Greater than maximum'
-                //  = schema.test(bad_data);
+        var schema = legit.String().max(12).regex(/(\w+)\s(\w+)/);
+        schema.test("JohnSmith");      // 'Regular expression didn't match'
+        schema.test("John Smith");     // null
+        schema.test("John R. Smith");  // 'Greater than maxmimum'
 ```
 
-### Array
+### legit.Array()
+
+Accepts only Arrays. Can be used recursively with all other schemas.
+
+You have two options when using legit.Array():
+- Set a schema to validate all objects of the array by using `.type(schema)` once.
+- Set a different schema for each item by using `.item(schema)` once for each item, in the expected order.
+
+Modifiers:
+- `none()`: Accepts `null` and `undefined`.
+- `min(a)`: Sets minimum allowed length (`a`). Only affects same-type arrays.
+- `max(b)`: Sets maximum allowed length (`b`). Only affects same-type arrays.
+- `type(s)`: Sets a schema (`s`) to test all array items. Establishes array as same-type.
+- `item(s)`: Sets a schema (`s`) to test a single item of the array. Establishes array as different-type.
+- `strict()`: Rejects arrays with length greater than expected. Only affects different-type arrays.
 
 ```js
-        var schema = legit.Array().min(2).max(5).
-            type(legit.Number().min(0).max(100));
+        // Same-type array
+        var schema = legit.Array().max(4)
+            .type(legit.Number().min(0).max(10));
 
-        var good_data = [1, 2, 3];
-        var bad_data = [-10, true, "potato", [1, 2], null];
+        schema.test([1, 2, 3, 4]);     // null
+        schema.test([1, 2, 3, 4, 5]);  // 'Greater than maxmimum'
+        schema.test([5, 11]);          // [null, 'Greater than maximum']
         
-        var result1 = legit.mize(schema, good_data); // null (no error)
-                //  = schema.test(good_data);
+        // Different-type array
+        var schema = legit.Array().strict()
+            .item(legit.String().min(3).max(12))
+            .item(legit.Number().min(21));
+
+        schema.test(["John Smith", 25]);
+        // null
+
+        schema.test(["John", 25, true]);  
+        // [ null, null, 'More items than expected (Array in strict mode)' ]
         
-        var result2 = legit.mize(schema, bad_data);  // ['Less than minimum',
-                //  = schema.test(bad_data);         //  'Not a number',
-                                                     //  'Not a number',
-                                                     //  'Not a number',
-                                                     //  'Number is null or undefined']
+        schema.test(["John Smith Jr.", 20]);
+        // [ 'Greater than maximum', 'Less than minimum' ]
 ```
 
-### Map
+### legit.Map()
+
+Accepts only Maps/Objects. Can be used recursively with all other schemas.
+
+Modifiers:
+- `none()`: Accepts `null` and `undefined`.
+- `strict()`: Rejects maps with unexpected keys.
+- `key(n, s)`: Sets an expected key-value pair. `n` is the expected key and `s` is the schema that will be used to validate the value.
 
 ```js
-        var schema = legit.Map().
-            key("name", legit.String().min(5).max(10)).
-            key("age", legit.Number().min(21).max(130));
+    var schema = legit.Map().strict()
+        .key("user", legit.String().min(3).max(12))
+        .key("age", legit.Number().min(21));
 
-        var good_data = {
-            "name"  : "John Doe",
-            "age"   : 21
-            };
-        
-        var bad_data = {
-            "name"  : "SuperLongName",
-            "age"   : 16
-            };
+    schema.test({
+        "user": "John Smith",
+        "age": 25
+    }) 
+            // null
+    
+    schema.test({
+        "user": "John Smith Junior",
+        "age": 16
+    })
+            // { user: 'Greater than maximum',
+            //    age: 'Less than minimum' } 
 
-        var result1 = legit.mize(schema, good_data); // null (no error)
-                //  = schema.test(good_data);
-        
-        var result2 = legit.mize(schema, bad_data);  // { name: 'Greater than maximum',
-                //  = schema.test(bad_data);         //   age:  'Less than minimum' }
+
 ```
+
+## Support/Contact
+
+Feel free to [contact me](https://github.com/danaugrs) with questions, suggestions, or comments.
+
+I hope you enjoy using legit.js as much as I enjoyed writing it.
+
+If you come across any issues, please [report them](https://github.com/danaugrs/legitjs/issues).
 

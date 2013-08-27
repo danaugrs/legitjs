@@ -8,6 +8,18 @@
 
 "use strict";
 
+
+/************************
+ * Anything Legitimizer
+ */
+
+function Any() {}
+
+Any.prototype.test = function(value) {
+    return null
+}
+
+
 /************************
  * Null Legitimizer
  */
@@ -21,15 +33,6 @@ Null.prototype.test = function(value) {
 	return "Not null";
 }
 
-/************************
- * Anything Legitimizer
- */
-
-function Any() {}
-
-Any.prototype.test = function(value) {
-    return null
-}
 
 /************************
  * Bool Legitimizer
