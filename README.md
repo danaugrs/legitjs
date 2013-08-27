@@ -41,11 +41,13 @@ Suppose you have some incoming network data and you want to validate it before u
     var err = userSchema.test(data);
 
     if (err) {
-        // Data did not fit the schema. Check 'err' to learn what went wrong.
+        // Data did not fit the schema.
+        // Check 'err' to learn what went wrong.
         console.log(err);
     }
     else {
-        // Data successfully validated! Now you can use/process it with confidence.
+        // Data successfully validated!
+        // Now you can use/process it with confidence.
         ...
     }
 ```
@@ -144,9 +146,15 @@ Modifiers:
 Example:
 ```js
         var schema = legit.String().max(12).regex(/(\w+)\s(\w+)/);
-        schema.test("JohnSmith");      // 'Regular expression didn't match'
-        schema.test("John Smith");     // null
-        schema.test("John R. Smith");  // 'Greater than maxmimum'
+
+        schema.test("JohnSmith");
+        // 'Regular expression didn't match'
+        
+        schema.test("John Smith");
+        // null
+        
+        schema.test("John R. Smith");
+        // 'Greater than maxmimum'
 ```
 
 ### legit.Array()
@@ -171,9 +179,14 @@ Example:
         var schema = legit.Array().max(4)
             .type(legit.Number().min(0).max(10));
 
-        schema.test([1, 2, 3, 4]);     // null
-        schema.test([1, 2, 3, 4, 5]);  // 'Greater than maxmimum'
-        schema.test([5, 11]);          // [null, 'Greater than maximum']
+        schema.test([1, 2, 3, 4]);
+        // null
+        
+        schema.test([1, 2, 3, 4, 5]);
+        // 'Greater than maxmimum'
+        
+        schema.test([5, 11]);
+        // [null, 'Greater than maximum']
         
         // Different-type array
         var schema = legit.Array().strict()
