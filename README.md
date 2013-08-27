@@ -50,6 +50,17 @@ Suppose you have some incoming network data and you want to validate it before u
     }
 ```
 
+## Installing and Importing
+
+Using [NPM](https://npmjs.org/), run the following command in your project's root directory.
+```
+$ npm install legitjs
+```
+
+In your Node.js program:
+```js
+    var legit = require("legitjs");
+```
 
 ## Types Of Schemas
 
