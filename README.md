@@ -198,14 +198,14 @@ Example:
         "user": "John Smith",
         "age": 25
     }) 
-            // null
+        // null
     
     schema.test({
         "user": "John Smith Junior",
         "age": 16
     })
-            // { user: 'Greater than maximum',
-            //    age: 'Less than minimum' } 
+        // { user: 'Greater than maximum',
+        //    age: 'Less than minimum' } 
 
 
 ```
