@@ -206,8 +206,6 @@ Example:
     })
         // { user: 'Greater than maximum',
         //    age: 'Less than minimum' } 
-
-
 ```
 
 ## Support/Contact
