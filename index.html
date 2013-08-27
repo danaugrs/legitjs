@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Legitjs : Lightweight objects and strings validation for Node.js" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Legitjs</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/danaugrs/legitjs">View on GitHub</a>
+
+          <h1 id="project_title">Legitjs</h1>
+          <h2 id="project_tagline">Lightweight objects and strings validation for Node.js</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/danaugrs/legitjs/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/danaugrs/legitjs/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="legitjs-010" class="anchor" href="#legitjs-010"><span class="octicon octicon-link"></span></a>legit.js 0.1.0</h1>
+
+<p>Lightweight objects and strings validation for Node.js.</p>
+
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Create a schema and use it to validate data.</p>
+
+<p>There are two equivalent usages:</p>
+
+<ul>
+<li><code>schema.test(data)</code></li>
+<li><code>legit.mize(schema, data)</code></li>
+</ul><p>These functions return <code>null</code> if there was no error validating the data.
+If the data didn't fit the schema, they return a description of the error (either a String, an Array, or a Map/Object).</p>
+
+<div class="highlight"><pre>    <span class="kd">var</span> <span class="nx">schema</span> <span class="o">=</span> <span class="nx">legit</span><span class="p">.</span><span class="nb">Number</span><span class="p">().</span><span class="nx">min</span><span class="p">(</span><span class="mi">5</span><span class="p">).</span><span class="nx">max</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+
+    <span class="kd">var</span> <span class="nx">err1</span> <span class="o">=</span> <span class="nx">schema</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="mi">30</span><span class="p">);</span>  <span class="c1">// err1 = 'Greater than max'</span>
+    <span class="kd">var</span> <span class="nx">err2</span> <span class="o">=</span> <span class="nx">schema</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="mi">6</span><span class="p">);</span>   <span class="c1">// err2 = null</span>
+
+    <span class="c1">// alternative usage:</span>
+    <span class="nx">err1</span> <span class="o">=</span> <span class="nx">legit</span><span class="p">.</span><span class="nx">mize</span><span class="p">(</span><span class="nx">schema</span><span class="p">,</span> <span class="mi">30</span><span class="p">);</span>  <span class="c1">// err1 = 'Greater than max'</span>
+    <span class="nx">err2</span> <span class="o">=</span> <span class="nx">legit</span><span class="p">.</span><span class="nx">mize</span><span class="p">(</span><span class="nx">schema</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>   <span class="c1">// err2 = null</span>
+</pre></div>
+
+<p>Note: The keyword "new" should not be used when creating an instance of a schema.</p>
+
+<h3>
+<a name="real-world-example" class="anchor" href="#real-world-example"><span class="octicon octicon-link"></span></a>Real world example</h3>
+
+<p>Suppose you have some incoming network data and you want to validate it before using/processing it.</p>
+
+<div class="highlight"><pre>    <span class="c1">// Create the schema</span>
+    <span class="kd">var</span> <span class="nx">userSchema</span> <span class="o">=</span> <span class="nx">legit</span><span class="p">.</span><span class="nx">Map</span><span class="p">().</span><span class="nx">strict</span><span class="p">()</span>
+        <span class="p">.</span><span class="nx">key</span><span class="p">(</span><span class="s2">"user"</span><span class="p">,</span> <span class="nx">legit</span><span class="p">.</span><span class="nb">String</span><span class="p">().</span><span class="nx">min</span><span class="p">(</span><span class="mi">3</span><span class="p">).</span><span class="nx">max</span><span class="p">(</span><span class="mi">20</span><span class="p">))</span>
+        <span class="p">.</span><span class="nx">key</span><span class="p">(</span><span class="s2">"age"</span><span class="p">,</span> <span class="nx">legit</span><span class="p">.</span><span class="nb">Number</span><span class="p">().</span><span class="nx">min</span><span class="p">(</span><span class="mi">21</span><span class="p">));</span>
+
+    <span class="c1">// Validate incoming data</span>
+    <span class="kd">var</span> <span class="nx">err</span> <span class="o">=</span> <span class="nx">userSchema</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Data did not fit the schema.</span>
+        <span class="c1">// Check 'err' to learn what went wrong.</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="c1">// Data successfully validated!</span>
+        <span class="c1">// Now you can use/process it with confidence.</span>
+        <span class="p">...</span>
+    <span class="p">}</span>
+</pre></div>
+
+<h2>
+<a name="installing-and-importing" class="anchor" href="#installing-and-importing"><span class="octicon octicon-link"></span></a>Installing and Importing</h2>
+
+<p>Using <a href="https://npmjs.org/">NPM</a>, run the following command in your project's root directory.</p>
+
+<pre><code>$ npm install legitjs
+</code></pre>
+
+<p>In your Node.js program:</p>
+
+<div class="highlight"><pre>    <span class="kd">var</span> <span class="nx">legit</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">"legitjs"</span><span class="p">);</span>
+</pre></div>
+
+<h2>
+<a name="types-of-schemas" class="anchor" href="#types-of-schemas"><span class="octicon octicon-link"></span></a>Types Of Schemas</h2>
+
+<ul>
+<li><a href="#legitany">legit.Any()</a></li>
+<li><a href="#legitnull">legit.Null()</a></li>
+<li><a href="#legitboolean">legit.Boolean()</a></li>
+<li><a href="#legitnumber">legit.Number()</a></li>
+<li><a href="#legitstring">legit.String()</a></li>
+<li><a href="#legitarray">legit.Array()</a></li>
+<li><a href="#legitmap">legit.Map()</a></li>
+</ul><h3>
+<a name="legitany" class="anchor" href="#legitany"><span class="octicon octicon-link"></span></a>legit.Any()</h3>
+
+<p>Accepts anything.</p>
+
+<p>Example:</p>
+
+<div class="highlight"><pre>        <span class="kd">var</span> <span class="nx">schema</span> <span class="o">=</span> <span class="nx">legit</span><span class="p">.</span><span class="nx">Any</span><span class="p">();</span>
+        <span class="nx">schema</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">"POTATO"</span><span class="p">)</span>   <span class="c1">// null</span>
+        <span class="nx">schema</span><span class="p">.</span><span class="nx">test</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>  <span class="c1">// null</span>
+</pre></div>
+
+<h3>
+<a name="legitnull" class="anchor" href="#legitnull"><span class="octicon octicon-link"></span></a>legit.Null()</h3>
+
+<p>Accepts only <code>null</code>.</p>
+
+<p>Example:</p>
+
+<div class="highlight"><pre>        <span class="kd">var</span> <span class="nx">schema</span> <span class="o">=</span> <span class="nx">legit</span><span class="p">.</span><span class="nx">Null</span><span class="p">();</span>
+        <span class="nx">schema</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">"Hello"</span><span class="p">)</span>    <span class="c1">// 'Not null'</span>
+        <span class="nx">schema</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="kc">null</span><span class="p">)</span>       <span class="c1">// null</span>
+</pre></div>
+
+<h3>
+<a name="legitboolean" class="anchor" href="#legitboolean"><span class="octicon octicon-link"></span></a>legit.Boolean()</h3>
+
+<p>Accepts only Booleans.</p>
+
+<p>Modifiers:</p>
+
+<ul>
+<li>
+<code>none()</code>: Accepts <code>null</code> and <code>undefined</code>.</li>
+</ul><p>Example:</p>
+
+<div class="highlight"><pre>        <span class="kd">var</span> <span class="nx">schema</span> <span class="o">=</span> <span class="nx">legit</span><span class="p">.</span><span class="nx">Bool</span><span class="p">();</span>
+        <span class="nx">schema</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>    <span class="c1">// 'Not a boolean'</span>
+        <span class="nx">schema</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="kc">null</span><span class="p">)</span>   <span class="c1">// 'Boolean is null or undefined'</span>
+        <span class="nx">schema</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>   <span class="c1">// null</span>
+
+        <span class="kd">var</span> <span class="nx">schema2</span> <span class="o">=</span> <span class="nx">legit</span><span class="p">.</span><span class="nx">Bool</span><span class="p">().</span><span class="nx">none</span><span class="p">()</span>
+        <span class="nx">schema2</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="kc">null</span><span class="p">)</span>   <span class="c1">// null</span>
+</pre></div>
+
+<h3>
+<a name="legitnumber" class="anchor" href="#legitnumber"><span class="octicon octicon-link"></span></a>legit.Number()</h3>
+
+<p>Accepts only Numbers.</p>
+
+<p>Modifiers:</p>
+
+<ul>
+<li>
+<code>none()</code>: Accepts <code>null</code> and <code>undefined</code>.</li>
+<li>
+<code>min(a)</code>: Sets minimum allowed value (<code>a</code>).</li>
+<li>
+<code>max(b)</code>: Sets maximum allowed value (<code>b</code>).</li>
+</ul><p>Example:</p>
+
+<div class="highlight"><pre>        <span class="kd">var</span> <span class="nx">schema</span> <span class="o">=</span> <span class="nx">legit</span><span class="p">.</span><span class="nb">Number</span><span class="p">().</span><span class="nx">min</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">).</span><span class="nx">max</span><span class="p">(</span><span class="mi">30</span><span class="p">);</span>
+        <span class="nx">schema</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">);</span>    <span class="c1">// null</span>
+        <span class="nx">schema</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="mi">31</span><span class="p">);</span>    <span class="c1">// 'Greater than maximum'</span>
+        <span class="nx">schema</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>  <span class="c1">// 'Not a number'</span>
+        <span class="nx">schema</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>  <span class="c1">// 'Number is null or undefined'</span>
+</pre></div>
+
+<h3>
+<a name="legitstring" class="anchor" href="#legitstring"><span class="octicon octicon-link"></span></a>legit.String()</h3>
+
+<p>Accepts only Strings.</p>
+
+<p>Modifiers:</p>
+
+<ul>
+<li>
+<code>none()</code>: Accepts <code>null</code> and <code>undefined</code>.</li>
+<li>
+<code>min(a)</code>: Sets minimum allowed length (<code>a</code>).</li>
+<li>
+<code>max(b)</code>: Sets maximum allowed length (<code>b</code>).</li>
+<li>
+<code>regex(e)</code>: Sets a regular expression to use (<code>e</code>).</li>
+</ul><p>Example:</p>
+
+<div class="highlight"><pre>        <span class="kd">var</span> <span class="nx">schema</span> <span class="o">=</span> <span class="nx">legit</span><span class="p">.</span><span class="nb">String</span><span class="p">().</span><span class="nx">max</span><span class="p">(</span><span class="mi">12</span><span class="p">).</span><span class="nx">regex</span><span class="p">(</span><span class="sr">/(\w+)\s(\w+)/</span><span class="p">);</span>
+
+        <span class="nx">schema</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">"JohnSmith"</span><span class="p">);</span>
+        <span class="c1">// 'Regular expression didn't match'</span>
+
+        <span class="nx">schema</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">"John Smith"</span><span class="p">);</span>
+        <span class="c1">// null</span>
+
+        <span class="nx">schema</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">"John R. Smith"</span><span class="p">);</span>
+        <span class="c1">// 'Greater than maxmimum'</span>
+</pre></div>
+
+<h3>
+<a name="legitarray" class="anchor" href="#legitarray"><span class="octicon octicon-link"></span></a>legit.Array()</h3>
+
+<p>Accepts only Arrays. Can be used recursively with all other schemas.</p>
+
+<p>You have two options when using legit.Array():</p>
+
+<ul>
+<li>Set a schema to validate all objects of the array by using <code>.type(schema)</code> once.</li>
+<li>Set a different schema for each item by using <code>.item(schema)</code> once for each item, in the expected order.</li>
+</ul><p>Modifiers:</p>
+
+<ul>
+<li>
+<code>none()</code>: Accepts <code>null</code> and <code>undefined</code>.</li>
+<li>
+<code>min(a)</code>: Sets minimum allowed length (<code>a</code>). Only affects same-type arrays.</li>
+<li>
+<code>max(b)</code>: Sets maximum allowed length (<code>b</code>). Only affects same-type arrays.</li>
+<li>
+<code>type(s)</code>: Sets a schema (<code>s</code>) to test all array items. Establishes array as same-type.</li>
+<li>
+<code>item(s)</code>: Sets a schema (<code>s</code>) to test a single item of the array. Establishes array as different-type.</li>
+<li>
+<code>strict()</code>: Rejects arrays with length greater than expected. Only affects different-type arrays.</li>
+</ul><p>Example:</p>
+
+<div class="highlight"><pre>        <span class="c1">// Same-type array</span>
+        <span class="kd">var</span> <span class="nx">schema</span> <span class="o">=</span> <span class="nx">legit</span><span class="p">.</span><span class="nb">Array</span><span class="p">().</span><span class="nx">max</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">type</span><span class="p">(</span><span class="nx">legit</span><span class="p">.</span><span class="nb">Number</span><span class="p">().</span><span class="nx">min</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">max</span><span class="p">(</span><span class="mi">10</span><span class="p">));</span>
+
+        <span class="nx">schema</span><span class="p">.</span><span class="nx">test</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]);</span>
+        <span class="c1">// null</span>
+
+        <span class="nx">schema</span><span class="p">.</span><span class="nx">test</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]);</span>
+        <span class="c1">// 'Greater than maxmimum'</span>
+
+        <span class="nx">schema</span><span class="p">.</span><span class="nx">test</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">11</span><span class="p">]);</span>
+        <span class="c1">// [null, 'Greater than maximum']</span>
+
+        <span class="c1">// Different-type array</span>
+        <span class="kd">var</span> <span class="nx">schema</span> <span class="o">=</span> <span class="nx">legit</span><span class="p">.</span><span class="nb">Array</span><span class="p">().</span><span class="nx">strict</span><span class="p">()</span>
+            <span class="p">.</span><span class="nx">item</span><span class="p">(</span><span class="nx">legit</span><span class="p">.</span><span class="nb">String</span><span class="p">().</span><span class="nx">min</span><span class="p">(</span><span class="mi">3</span><span class="p">).</span><span class="nx">max</span><span class="p">(</span><span class="mi">12</span><span class="p">))</span>
+            <span class="p">.</span><span class="nx">item</span><span class="p">(</span><span class="nx">legit</span><span class="p">.</span><span class="nb">Number</span><span class="p">().</span><span class="nx">min</span><span class="p">(</span><span class="mi">21</span><span class="p">));</span>
+
+        <span class="nx">schema</span><span class="p">.</span><span class="nx">test</span><span class="p">([</span><span class="s2">"John Smith"</span><span class="p">,</span> <span class="mi">25</span><span class="p">]);</span>
+        <span class="c1">// null</span>
+
+        <span class="nx">schema</span><span class="p">.</span><span class="nx">test</span><span class="p">([</span><span class="s2">"John"</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="kc">true</span><span class="p">]);</span>  
+        <span class="c1">// [ null, null,</span>
+        <span class="c1">//   'More items than expected (Array in strict mode)' ]</span>
+
+        <span class="nx">schema</span><span class="p">.</span><span class="nx">test</span><span class="p">([</span><span class="s2">"John Smith Jr."</span><span class="p">,</span> <span class="mi">20</span><span class="p">]);</span>
+        <span class="c1">// [ 'Greater than maximum', 'Less than minimum' ]</span>
+</pre></div>
+
+<h3>
+<a name="legitmap" class="anchor" href="#legitmap"><span class="octicon octicon-link"></span></a>legit.Map()</h3>
+
+<p>Accepts only Maps/Objects. Can be used recursively with all other schemas.</p>
+
+<p>Modifiers:</p>
+
+<ul>
+<li>
+<code>none()</code>: Accepts <code>null</code> and <code>undefined</code>.</li>
+<li>
+<code>strict()</code>: Rejects maps with unexpected keys.</li>
+<li>
+<code>key(n, s)</code>: Sets an expected key-value pair. <code>n</code> is the expected key and <code>s</code> is the schema that will be used to validate the value.</li>
+</ul><p>Example:</p>
+
+<div class="highlight"><pre>    <span class="kd">var</span> <span class="nx">schema</span> <span class="o">=</span> <span class="nx">legit</span><span class="p">.</span><span class="nx">Map</span><span class="p">().</span><span class="nx">strict</span><span class="p">()</span>
+        <span class="p">.</span><span class="nx">key</span><span class="p">(</span><span class="s2">"user"</span><span class="p">,</span> <span class="nx">legit</span><span class="p">.</span><span class="nb">String</span><span class="p">().</span><span class="nx">min</span><span class="p">(</span><span class="mi">3</span><span class="p">).</span><span class="nx">max</span><span class="p">(</span><span class="mi">12</span><span class="p">))</span>
+        <span class="p">.</span><span class="nx">key</span><span class="p">(</span><span class="s2">"age"</span><span class="p">,</span> <span class="nx">legit</span><span class="p">.</span><span class="nb">Number</span><span class="p">().</span><span class="nx">min</span><span class="p">(</span><span class="mi">21</span><span class="p">));</span>
+
+    <span class="nx">schema</span><span class="p">.</span><span class="nx">test</span><span class="p">({</span>
+        <span class="s2">"user"</span><span class="o">:</span> <span class="s2">"John Smith"</span><span class="p">,</span>
+        <span class="s2">"age"</span><span class="o">:</span> <span class="mi">25</span>
+    <span class="p">})</span> 
+        <span class="c1">// null</span>
+
+    <span class="nx">schema</span><span class="p">.</span><span class="nx">test</span><span class="p">({</span>
+        <span class="s2">"user"</span><span class="o">:</span> <span class="s2">"John Smith Junior"</span><span class="p">,</span>
+        <span class="s2">"age"</span><span class="o">:</span> <span class="mi">16</span>
+    <span class="p">})</span>
+        <span class="c1">// { user: 'Greater than maximum',</span>
+        <span class="c1">//    age: 'Less than minimum' } </span>
+</pre></div>
+
+<h2>
+<a name="supportcontact" class="anchor" href="#supportcontact"><span class="octicon octicon-link"></span></a>Support/Contact</h2>
+
+<p>Feel free to <a href="https://github.com/danaugrs">contact me</a> with questions, suggestions, or comments.</p>
+
+<p>I hope you enjoy using legit.js as much as I enjoyed writing it.</p>
+
+<p>If you come across any issues, please <a href="https://github.com/danaugrs/legitjs/issues">report them</a>.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Legitjs maintained by <a href="https://github.com/danaugrs">danaugrs</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-43558314-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+
+  </body>
+</html>
