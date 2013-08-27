@@ -100,7 +100,7 @@ Example:
 Accepts only Booleans.
 
 Modifiers:
-- none(): Accepts `null` and `undefined`.
+- `none()`: Accepts `null` and `undefined`.
 
 Example:
 ```js
