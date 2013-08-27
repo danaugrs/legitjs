@@ -5,7 +5,7 @@ Lightweight objects and strings validation for Node.js.
 
 ## Usage
 
-Legit.js allows you to create schemas and then use them to validate data.
+Legit.js allows you to create schemas and use them to validate data.
 
 There are two alternative usages:
 - `schema.test(data)`
@@ -25,16 +25,20 @@ If the data didn't fit the schema, they return a description of the error (eithe
     err2 = legit.mize(schema, 6);   // err2 = null
 ```
 
-Suppose you have some incoming network data and you want to validate it before using/processing it.
+Note: The keyword "new" should not be used when creating an instance of a schema.
+
+### Real world example
+
+Suppose you have some incoming network data and you want to validate it before using/processing it:
 
 ```js
     // Create the schema
-    var loginSchema = legit.Map().strict()
+    var userSchema = legit.Map().strict()
         .key("user", legit.String().min(3).max(20))
         .key("age", legit.Number().min(21));
     
     // Validate incoming data
-    var err = loginSchema.test(data);
+    var err = userSchema.test(data);
 
     if (err) {
         // Data did not fit the schema. Check 'err' to learn what went wrong.
@@ -46,18 +50,16 @@ Suppose you have some incoming network data and you want to validate it before u
     }
 ```
 
-Note: Keyword "new" should not be used when creating an instance of a schema.
-
 
 ## Types Of Schemas
 
-- legit.Any()
-- legit.Null()
-- legit.Boolean()
-- legit.Number()
-- legit.String()
-- legit.Array()
-- legit.Map()
+- [legit.Any()](#legitany)
+- [legit.Null()](#legitnull)
+- [legit.Boolean()](#legitboolean)
+- [legit.Number()](#legitnumber)
+- [legit.String()](#legitstring)
+- [legit.Array()](#legitarray)
+- [legit.Map()](#legitmap)
 
 
 ### legit.Any()
