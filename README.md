@@ -5,9 +5,9 @@ Lightweight objects and strings validation for Node.js.
 
 ## Usage
 
-Legit.js allows you to create schemas and use them to validate data.
+Create a schema and use it to validate data.
 
-There are two alternative usages:
+There are two equivalent usages:
 - `schema.test(data)`
 - `legit.mize(schema, data)`
 
@@ -20,7 +20,7 @@ If the data didn't fit the schema, they return a description of the error (eithe
     var err1 = schema.test(30);  // err1 = 'Greater than max'
     var err2 = schema.test(6);   // err2 = null
     
-    // alternate usage
+    // alternative usage:
     err1 = legit.mize(schema, 30);  // err1 = 'Greater than max'
     err2 = legit.mize(schema, 6);   // err2 = null
 ```
@@ -29,7 +29,7 @@ Note: The keyword "new" should not be used when creating an instance of a schema
 
 ### Real world example
 
-Suppose you have some incoming network data and you want to validate it before using/processing it:
+Suppose you have some incoming network data and you want to validate it before using/processing it.
 
 ```js
     // Create the schema
@@ -66,6 +66,7 @@ Suppose you have some incoming network data and you want to validate it before u
 
 Accepts anything.
 
+Example:
 ```js
         var schema = legit.Any();
         schema.test("POTATO")   // null
@@ -76,6 +77,7 @@ Accepts anything.
 
 Accepts only `null`.
 
+Example:
 ```js
         var schema = legit.Null();
         schema.test("Hello")    // 'Not null'
@@ -89,6 +91,7 @@ Accepts only Booleans.
 Modifiers:
 - none(): Accepts `null` and `undefined`.
 
+Example:
 ```js
         var schema = legit.Bool();
         schema.test(123)    // 'Not a boolean'
@@ -108,6 +111,7 @@ Modifiers:
 - `min(a)`: Sets minimum allowed value (`a`).
 - `max(b)`: Sets maximum allowed value (`b`).
 
+Example:
 ```js
         var schema = legit.Number().min(-5).max(30);
         schema.test(-5);    // null
@@ -126,6 +130,7 @@ Modifiers:
 - `max(b)`: Sets maximum allowed length (`b`).
 - `regex(e)`: Sets a regular expression to use (`e`).
 
+Example:
 ```js
         var schema = legit.String().max(12).regex(/(\w+)\s(\w+)/);
         schema.test("JohnSmith");      // 'Regular expression didn't match'
@@ -149,6 +154,7 @@ Modifiers:
 - `item(s)`: Sets a schema (`s`) to test a single item of the array. Establishes array as different-type.
 - `strict()`: Rejects arrays with length greater than expected. Only affects different-type arrays.
 
+Example:
 ```js
         // Same-type array
         var schema = legit.Array().max(4)
@@ -182,6 +188,7 @@ Modifiers:
 - `strict()`: Rejects maps with unexpected keys.
 - `key(n, s)`: Sets an expected key-value pair. `n` is the expected key and `s` is the schema that will be used to validate the value.
 
+Example:
 ```js
     var schema = legit.Map().strict()
         .key("user", legit.String().min(3).max(12))
