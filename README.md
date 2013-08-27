@@ -197,7 +197,8 @@ Example:
         // null
 
         schema.test(["John", 25, true]);  
-        // [ null, null, 'More items than expected (Array in strict mode)' ]
+        // [ null, null,
+        //   'More items than expected (Array in strict mode)' ]
         
         schema.test(["John Smith Jr.", 20]);
         // [ 'Greater than maximum', 'Less than minimum' ]
