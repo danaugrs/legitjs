@@ -1,6 +1,6 @@
 {
   "name": "legitjs",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Lightweight objects and strings validation for Node.js",
   "main": "legit.js",
   "scripts": {
