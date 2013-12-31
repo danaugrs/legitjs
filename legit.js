@@ -288,8 +288,11 @@ Map.prototype.strict = function(state) {
     return this;
 }
 
-Map.prototype.key = function(name, schema) {
-    this._keys[name] = schema;
+Map.prototype.key = function(name, schema, req) {
+    if (req === undefined) {
+        req = true;
+    }
+    this._keys[name] = {schema: schema, req: req};
     return this;
 }
 
@@ -298,6 +301,7 @@ Map.prototype.test = function(value) {
     var errs = {};
 	var error = false;
     var err, el;
+    var kinfo;
 
     if (value == null) {
         if (this._none) {
@@ -309,10 +313,13 @@ Map.prototype.test = function(value) {
         return "Not a map";
     }
     for (el in this._keys) {
+        kinfo = this._keys[el];
         if (value[el] === undefined) {
-            err = "Missing this key";
+            if (kinfo.req) {
+                err = "Missing this key";
+            }
         } else {
-            err = this._keys[el].test(value[el]);
+            err = kinfo.schema.test(value[el]);
         }
 		errs[el] = err;
         if (err != null) {
@@ -323,11 +330,7 @@ Map.prototype.test = function(value) {
         for (el in value) {
             if (this._keys[el] == undefined) {
                 err = "Unexpected key (Map in strict mode)" 
-            } else {
-                err = this._keys[el].test(value[el]);
-            }
-		    errs[el] = err;
-            if (err != null) {
+		        errs[el] = err;
 		    	error = true;
             }
         }
