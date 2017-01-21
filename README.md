@@ -5,7 +5,7 @@ Lightweight objects and strings validation for Node.js.
 
 ## Usage
 
-Create a schema and use it to validate data.
+Create a schema (i.e. define constraints) and use it to validate data.
 
 There are two equivalent usages:
 - `schema.test(data)`
