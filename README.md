@@ -1,4 +1,4 @@
-# legit.js 0.1.1
+# legit.js
 
 Lightweight objects and strings validation for Node.js.
 
