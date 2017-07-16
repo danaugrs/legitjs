@@ -1,5 +1,7 @@
 # legit.js
 
+[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md)
+
 Lightweight objects and strings validation for Node.js.
 
 
