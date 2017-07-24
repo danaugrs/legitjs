@@ -1,11 +1,13 @@
-# legit.js 0.1.0
+# legit.js
+
+[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md)
 
 Lightweight objects and strings validation for Node.js.
 
 
 ## Usage
 
-Create a schema and use it to validate data.
+Create a schema (i.e. define constraints) and use it to validate data.
 
 There are two equivalent usages:
 - `schema.test(data)`
@@ -240,4 +242,3 @@ Feel free to [contact me](https://github.com/danaugrs) with questions, suggestio
 I hope you enjoy using legit.js as much as I enjoyed writing it.
 
 If you come across any issues, please [report them](https://github.com/danaugrs/legitjs/issues).
-
