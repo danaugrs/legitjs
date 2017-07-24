@@ -18,10 +18,10 @@ If the data didn't fit the schema, they return a description of the error (eithe
 
 ```js
     var schema = legit.Number().min(5).max(10);
-    
+
     var err1 = schema.test(30);  // err1 = 'Greater than max'
     var err2 = schema.test(6);   // err2 = null
-    
+
     // alternative usage:
     err1 = legit.mize(schema, 30);  // err1 = 'Greater than max'
     err2 = legit.mize(schema, 6);   // err2 = null
@@ -83,9 +83,9 @@ Accepts anything.
 
 Example:
 ```js
-        var schema = legit.Any();
-        schema.test("POTATO")   // null
-        schema.test([1, 2, 3])  // null
+    var schema = legit.Any();
+    schema.test("POTATO")   // null
+    schema.test([1, 2, 3])  // null
 ```
 
 ### legit.Null()
@@ -94,9 +94,9 @@ Accepts only `null`.
 
 Example:
 ```js
-        var schema = legit.Null();
-        schema.test("Hello")    // 'Not null'
-        schema.test(null)       // null
+    var schema = legit.Null();
+    schema.test("Hello")    // 'Not null'
+    schema.test(null)       // null
 ```
 
 ### legit.Boolean()
@@ -108,13 +108,13 @@ Modifiers:
 
 Example:
 ```js
-        var schema = legit.Bool();
-        schema.test(123)    // 'Not a boolean'
-        schema.test(null)   // 'Boolean is null or undefined'
-        schema.test(true)   // null
+    var schema = legit.Bool();
+    schema.test(123)    // 'Not a boolean'
+    schema.test(null)   // 'Boolean is null or undefined'
+    schema.test(true)   // null
 
-        var schema2 = legit.Bool().none()
-        schema2.test(null)   // null
+    var schema2 = legit.Bool().none()
+    schema2.test(null)   // null
 ```
 
 ### legit.Number()
@@ -128,11 +128,11 @@ Modifiers:
 
 Example:
 ```js
-        var schema = legit.Number().min(-5).max(30);
-        schema.test(-5);    // null
-        schema.test(31);    // 'Greater than maximum'
-        schema.test(true);  // 'Not a number'
-        schema.test(null);  // 'Number is null or undefined'
+    var schema = legit.Number().min(-5).max(30);
+    schema.test(-5);    // null
+    schema.test(31);    // 'Greater than maximum'
+    schema.test(true);  // 'Not a number'
+    schema.test(null);  // 'Number is null or undefined'
 ```
 
 ### legit.String()
@@ -147,16 +147,16 @@ Modifiers:
 
 Example:
 ```js
-        var schema = legit.String().max(12).regex(/(\w+)\s(\w+)/);
+    var schema = legit.String().max(12).regex(/(\w+)\s(\w+)/);
+    
+    schema.test("JohnSmith");
+    // 'Regular expression didn't match'
 
-        schema.test("JohnSmith");
-        // 'Regular expression didn't match'
-        
-        schema.test("John Smith");
-        // null
-        
-        schema.test("John R. Smith");
-        // 'Greater than maxmimum'
+    schema.test("John Smith");
+    // null
+    
+    schema.test("John R. Smith");
+    // 'Greater than maxmimum'
 ```
 
 ### legit.Array()
@@ -177,33 +177,33 @@ Modifiers:
 
 Example:
 ```js
-        // Same-type array
-        var schema = legit.Array().max(4)
-            .type(legit.Number().min(0).max(10));
+    // Same-type array
+    var schema = legit.Array().max(4)
+        .type(legit.Number().min(0).max(10));
+        
+    schema.test([1, 2, 3, 4]);
+    // null
+    
+    schema.test([1, 2, 3, 4, 5]);
+    // 'Greater than maxmimum'
 
-        schema.test([1, 2, 3, 4]);
-        // null
+    schema.test([5, 11]);
+    // [null, 'Greater than maximum']
         
-        schema.test([1, 2, 3, 4, 5]);
-        // 'Greater than maxmimum'
+    // Different-type array
+    var schema = legit.Array().strict()
+        .item(legit.String().min(3).max(12))
+        .item(legit.Number().min(21));
         
-        schema.test([5, 11]);
-        // [null, 'Greater than maximum']
-        
-        // Different-type array
-        var schema = legit.Array().strict()
-            .item(legit.String().min(3).max(12))
-            .item(legit.Number().min(21));
-
-        schema.test(["John Smith", 25]);
-        // null
-
-        schema.test(["John", 25, true]);  
-        // [ null, null,
-        //   'More items than expected (Array in strict mode)' ]
-        
-        schema.test(["John Smith Jr.", 20]);
-        // [ 'Greater than maximum', 'Less than minimum' ]
+    schema.test(["John Smith", 25]);
+    // null
+    
+    schema.test(["John", 25, true]);  
+    // [ null, null,
+    //   'More items than expected (Array in strict mode)' ]
+    
+    schema.test(["John Smith Jr.", 20]);
+    // [ 'Greater than maximum', 'Less than minimum' ]
 ```
 
 ### legit.Map()
@@ -225,14 +225,14 @@ Example:
         "user": "John Smith",
         "age": 25
     }) 
-        // null
-    
+    // null
+        
     schema.test({
         "user": "John Smith Junior",
         "age": 16
     })
-        // { user: 'Greater than maximum',
-        //    age: 'Less than minimum' } 
+    // { user: 'Greater than maximum',
+    //    age: 'Less than minimum' } 
 ```
 
 ## Support/Contact
@@ -242,3 +242,4 @@ Feel free to [contact me](https://github.com/danaugrs) with questions, suggestio
 I hope you enjoy using legit.js as much as I enjoyed writing it.
 
 If you come across any issues, please [report them](https://github.com/danaugrs/legitjs/issues).
+
