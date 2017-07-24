@@ -1,0 +1,8 @@
+title: Legitjs
+description: Lightweight objects and strings validation for Node.js
+google_analytics: UA-43558314-1
+show_downloads: true
+theme: jekyll-theme-minimal
+
+gems:
+  - jekyll-mentions
